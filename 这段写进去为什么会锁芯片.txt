@@ -1,0 +1,52 @@
+	if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_13)==Bit_SET) 
+	{
+			
+		while(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_13)==Bit_SET) {
+		static int num_r;
+		Data_read_mul_N(0x50,0x00,num,Read_DATA);
+		num_r=sizeof(Read_DATA)/2;
+		
+			__IO u16 a[]={0};
+			__IO u8 a1[]={0},a2[]={0};
+			__IO u16 d[]={0},c[4][256];   //???
+			int i,j;//k;
+		
+									for(i=0;i<num_r;i++)
+									{
+										printf("读取值1:%d\r\n", Read_DATA[i]);
+									}
+		
+			for(i=0;i<num_r/2;i++)//分两组
+			{
+				for(j=0;j<(num_r/2);){a1[i]=a[j];j+=2;}//1-x-255
+				for(j=1;j<((num_r/2)+1);){a2[i]=a[j];j+=2;}//1-x-256
+			}
+			
+			for(i=0;i<(num_r/2);i++)//将16位数据还原
+			{
+				d[i]=a1[i]<<8|a2[i];
+			}
+
+			for(i=0;i<(num_r/8);i++)
+			{   
+				j=0;//k=1;
+				for(j=0;j<4;j++)
+				{  
+					c[j][i]=d[i];
+//					k++;
+//				    while(k==4)break;
+				}
+				
+			}
+									for(i=0;i<(num_r/8);i++)
+									{                                                                                            
+										for(j=0;j<4;j++)
+										printf("读取值2:%d\r\n", c[j][i]);
+									}
+					
+	 
+		
+		LED_YELLOW;
+		Delay_ms(50);
+								}
+	 
